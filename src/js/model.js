@@ -100,7 +100,6 @@ export const addToShoppingList = function () {
     title: state.recipe.title,
     ingredients: state.recipe.ingredients,
   };
-  // state.shoppingList.push(state.recipe.ingredients);
   state.shoppingList.push(shoppingListFormat);
   storeShoppingList();
 };
