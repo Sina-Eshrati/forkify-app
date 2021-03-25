@@ -30,15 +30,20 @@ class PaginationView extends View {
               <use href="${icons}#icon-arrow-right"></use>
             </svg>
           </button>
+          <span class="number-pages-v2">${numPages} pages</span>
         `;
     }
 
     // We are in page 1 and there are NO other pages
-    if (numPages === 1) return '';
+    if (numPages === 1)
+      return `
+    <span class="number-pages-v2">${numPages} page</span>
+    `;
 
     // We are in the last page
     if (curPage === numPages && numPages > 1) {
       return `
+      <span class="number-pages-v1">${numPages} pages</span>
         <button data-goto="${
           curPage - 1
         }" class="btn--inline pagination__btn--prev">
@@ -60,6 +65,7 @@ class PaginationView extends View {
             </svg>
             <span>Page ${curPage - 1}</span>
         </button>
+        <span class="number-pages-v1">${numPages} pages</span>
         <button data-goto="${
           curPage + 1
         }" class="btn--inline pagination__btn--next">

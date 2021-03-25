@@ -11,6 +11,7 @@
     <link rel="shortcut icon" href="src/img/favicon.png" type="image/x-icon" />
 
     <link rel="stylesheet" href="src/sass/main.scss" />
+    <link rel="stylesheet" href="src/css/style.css" />
     <script defer src="src/js/controller.js"></script>
 
     <title>forkify // Search over 1,000,000 recipes</title>
@@ -36,6 +37,14 @@
 
         <nav class="nav">
           <ul class="nav__list">
+            <li class="nav__item">
+              <button class="nav__btn nav__btn--shopping-list">
+                <svg class="nav__icon">
+                  <use href="src/img/icons.svg#Layer_1"></use>
+                </svg>
+                <span>Shopping list</span>
+              </button>
+            </li>
             <li class="nav__item">
               <button class="nav__btn nav__btn--add-recipe">
                 <svg class="nav__icon">
@@ -120,7 +129,7 @@
             </svg>
           </button> -->
         </div>
-
+        <button class="btn--sort">&downarrow; SORT</button>
         <p class="copyright">
           &copy; Copyright by
           <a
@@ -276,48 +285,143 @@
           <input value="23" required name="servings" type="number" />
         </div>
 
-        <div class="upload__column">
+        <div class="upload__column column_ingredients">
           <h3 class="upload__heading">Ingredients</h3>
           <label>Ingredient 1</label>
-          <input
-            value="0.5,kg,Rice"
-            type="text"
-            required
-            name="ingredient-1"
-            placeholder="Format: 'Quantity,Unit,Description'"
-          />
+          <div>
+            <input
+              class="input-ing"
+              value="5"
+              type="text"
+              name="ingredient-qnt-1"
+              placeholder="Quantity"
+            />
+            <input
+              class="input-ing"
+              value="kg"
+              type="text"
+              name="ingredient-unt-1"
+              placeholder="Unit"
+            />
+            <input
+              class="input-ing"
+              value="cheese"
+              type="text"
+              name="ingredient-des-1"
+              placeholder="Description"
+            />
+          </div>
           <label>Ingredient 2</label>
-          <input
-            value="1,,Avocado"
-            type="text"
-            name="ingredient-2"
-            placeholder="Format: 'Quantity,Unit,Description'"
-          />
+          <div>
+            <input
+              class="input-ing"
+              value="2"
+              type="text"
+              name="ingredient-qnt-2"
+              placeholder="Quantity"
+            />
+            <input
+              class="input-ing"
+              value="kg"
+              type="text"
+              name="ingredient-unt-2"
+              placeholder="Unit"
+            />
+            <input
+              class="input-ing"
+              value="peper"
+              type="text"
+              name="ingredient-des-2"
+              placeholder="Description"
+            />
+          </div>
           <label>Ingredient 3</label>
-          <input
-            value=",,salt"
-            type="text"
-            name="ingredient-3"
-            placeholder="Format: 'Quantity,Unit,Description'"
-          />
+          <div>
+            <input
+              class="input-ing"
+              value="3"
+              type="text"
+              name="ingredient-qnt-3"
+              placeholder="Quantity"
+            />
+            <input
+              class="input-ing"
+              value="kg"
+              type="text"
+              name="ingredient-unt-3"
+              placeholder="Unit"
+            />
+            <input
+              class="input-ing"
+              value="salt"
+              type="text"
+              name="ingredient-des-3"
+              placeholder="Description"
+            />
+          </div>
           <label>Ingredient 4</label>
-          <input
-            type="text"
-            name="ingredient-4"
-            placeholder="Format: 'Quantity,Unit,Description'"
-          />
+          <div>
+            <input
+              class="input-ing"
+              type="text"
+              name="ingredient-qnt-4"
+              placeholder="Quantity"
+            />
+            <input
+              class="input-ing"
+              type="text"
+              name="ingredient-unt-4"
+              placeholder="Unit"
+            />
+            <input
+              class="input-ing"
+              type="text"
+              name="ingredient-des-4"
+              placeholder="Description"
+            />
+          </div>
           <label>Ingredient 5</label>
-          <input
-            type="text"
-            name="ingredient-5"
-            placeholder="Format: 'Quantity,Unit,Description'"
-          />
+          <div>
+            <input
+              class="input-ing"
+              type="text"
+              name="ingredient-qnt-5"
+              placeholder="Quantity"
+            />
+            <input
+              class="input-ing"
+              type="text"
+              name="ingredient-unt-5"
+              placeholder="Unit"
+            />
+            <input
+              class="input-ing"
+              type="text"
+              name="ingredient-des-5"
+              placeholder="Description"
+            />
+          </div>
           <label>Ingredient 6</label>
-          <input
-            type="text"
-            name="ingredient-6"
-            placeholder="Format: 'Quantity,Unit,Description'"
-          />
+          <div>
+            <input
+              class="input-ing"
+              type="text"
+              name="ingredient-qnt-6"
+              placeholder="Quantity"
+            />
+            <input
+              class="input-ing"
+              type="text"
+              name="ingredient-unt-6"
+              placeholder="Unit"
+            />
+            <input
+              class="input-ing"
+              type="text"
+              name="ingredient-des-6"
+              placeholder="Description"
+            />
+          </div>
         </div>
 
         <button class="btn upload__btn">
@@ -327,6 +431,11 @@
           <span>Upload</span>
         </button>
       </form>
+      <button class="more">&plus;</button>
+    </div>
+    <div class="shopping-list-window hidden">
+      <button class="btn--close-modal-shopping-list">&times;</button>
+      <div class="shopping-list-container"></div>
     </div>
   </body>
 </html>

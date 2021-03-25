@@ -5,6 +5,7 @@ import resultsView from './views/resultsView';
 import paginationView from './views/paginationView';
 import bookmarksView from './views/bookmarksView';
 import addRecipeView from './views/addRecipeView.js';
+import shoppingListView from './views/shoppingListView.js';
 import { MODAL_CLOSE_SEC } from './config';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
@@ -55,7 +56,7 @@ const controlSearchResults = async function () {
 
 const controlPagination = function (goToPage) {
   // 1: Render results
-  resultsView.render(model.getSearchResultsPage(goToPage));
+  resultsView.render(model.getSearchResultsPage(goToPage, model.sorted));
 
   // 2: Render pagination
   paginationView.render(model.state.search);
@@ -115,6 +116,27 @@ const controlAddRecipe = async function (newRecipe) {
   }
 };
 
+const controlSortResults = function () {
+  model.sorted = !model.sorted;
+  resultsView.render(
+    model.getSearchResultsPage(model.state.search.page, model.sorted)
+  );
+};
+
+const controlAddIngredients = function () {
+  model.addToShoppingList();
+  shoppingListView.render(model.state.shoppingList);
+};
+
+const controlIngredients = function () {
+  shoppingListView.render(model.state.shoppingList);
+};
+
+const controlDeleteIngredients = function (title) {
+  model.deleteFromShoppingList(title);
+  shoppingListView.render(model.state.shoppingList);
+};
+
 const init = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
   recipeView.addHandlerRender(controlRecipe);
@@ -123,5 +145,9 @@ const init = function () {
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
   addRecipeView.addHandlerUpload(controlAddRecipe);
+  resultsView.addHandlerSort(controlSortResults);
+  recipeView.addHandlerAddToShoppingList(controlAddIngredients);
+  shoppingListView.addHandlerRender(controlIngredients);
+  shoppingListView.addHandlerDelete(controlDeleteIngredients);
 };
 init();

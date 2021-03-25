@@ -72,6 +72,11 @@ class RecipeView extends View {
 
   <div class="recipe__ingredients">
     <h2 class="heading--2">Recipe ingredients</h2>
+    <button class="btn--round btn_shopping_list">
+    <svg class="">
+      <use href="${icons}#Layer_1"></use>
+    </svg>
+  </button>
     <ul class="recipe__ingredient-list">
     ${this._data.ingredients.map(this._generateMarkupIngredient).join('')}
     </ul>
@@ -129,6 +134,13 @@ class RecipeView extends View {
   addHandlerAddBookmark(handler) {
     this._parentElement.addEventListener('click', function (e) {
       const btn = e.target.closest('.btn--bookmark');
+      if (!btn) return;
+      handler();
+    });
+  }
+  addHandlerAddToShoppingList(handler) {
+    this._parentElement.addEventListener('click', function (e) {
+      const btn = e.target.closest('.btn_shopping_list');
       if (!btn) return;
       handler();
     });

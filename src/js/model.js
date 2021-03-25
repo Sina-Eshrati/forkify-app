@@ -1,6 +1,7 @@
-import { async } from 'regenerator-runtime';
 import { API_URL, RES_PER_PAGE, KEY } from './config.js';
 import { AJAX } from './helpers';
+
+export let sorted = false;
 
 export const state = {
   recipe: {},
@@ -11,6 +12,7 @@ export const state = {
     page: 1,
   },
   bookmarks: [],
+  shoppingList: [],
 };
 
 const convertData = function (data) {
@@ -59,11 +61,17 @@ export const loadSearchResults = async function (query) {
   }
 };
 
-export const getSearchResultsPage = function (page = state.search.page) {
+export const getSearchResultsPage = function (page = state.search.page, sort) {
   state.search.page = page;
+  const results = sort
+    ? state.search.results.slice().sort(function (a, b) {
+        if (a.title.toLowerCase() < b.title.toLowerCase()) return -1;
+        if (a.title.toLowerCase() > b.title.toLowerCase()) return 1;
+      })
+    : state.search.results;
   const start = (page - 1) * state.search.resultsPerPage;
   const end = page * state.search.resultsPerPage;
-  return state.search.results.slice(start, end);
+  return results.slice(start, end);
 };
 
 export const updateServings = function (newServings) {
@@ -77,10 +85,30 @@ const storeBookmarks = function () {
   localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
 };
 
+const storeShoppingList = function () {
+  localStorage.setItem('shopping list', JSON.stringify(state.shoppingList));
+};
+
 export const addBookmark = function (recipe) {
   state.bookmarks.push(recipe);
   if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
   storeBookmarks();
+};
+
+export const addToShoppingList = function () {
+  const shoppingListFormat = {
+    title: state.recipe.title,
+    ingredients: state.recipe.ingredients,
+  };
+  // state.shoppingList.push(state.recipe.ingredients);
+  state.shoppingList.push(shoppingListFormat);
+  storeShoppingList();
+};
+
+export const deleteFromShoppingList = function (title) {
+  const index = state.shoppingList.findIndex(recipe => recipe.title === title);
+  state.shoppingList.splice(index, 1);
+  storeShoppingList();
 };
 
 export const deleteBookmark = function (id) {
@@ -93,6 +121,8 @@ export const deleteBookmark = function (id) {
 const init = function () {
   const storage = localStorage.getItem('bookmarks');
   if (storage) state.bookmarks = JSON.parse(storage);
+  const shoppingListStorage = localStorage.getItem('shopping list');
+  if (shoppingListStorage) state.shoppingList = JSON.parse(shoppingListStorage);
 };
 init();
 
@@ -103,15 +133,20 @@ const clearBookmarks = function () {
 
 export const uploadRecipe = async function (newRecipe) {
   try {
-    const ingredients = Object.entries(newRecipe)
-      .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
+    const ings = Object.entries(newRecipe)
+      .filter(entry => entry[0].startsWith('ingredient'))
+      .map(entry => entry[1]);
+    const length = ings.length;
+    let ingredientsArr = [];
+    for (let i = 1; i <= length / 3; i++) {
+      ingredientsArr.push(ings.slice(0, 3));
+      ings.splice(0, 3);
+    }
+    console.log(ingredientsArr);
+    const ingredients = ingredientsArr
+      .filter(ing => ing[2] !== '')
       .map(ing => {
-        const ingArr = ing[1].split(',').map(el => el.trim());
-        if (ingArr.length !== 3)
-          throw new Error(
-            'Wrong ingredient format! Please use the correct format :)'
-          );
-        const [quantity, unit, description] = ingArr;
+        const [quantity, unit, description] = ing;
         return { quantity: quantity ? quantity : null, unit, description };
       });
     const recipe = {
@@ -123,6 +158,7 @@ export const uploadRecipe = async function (newRecipe) {
       servings: newRecipe.servings,
       ingredients,
     };
+    console.log(recipe);
     const data = await AJAX(`${API_URL}?key=${KEY}`, recipe);
     state.recipe = convertData(data);
     addBookmark(state.recipe);
